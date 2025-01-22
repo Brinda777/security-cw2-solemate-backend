@@ -56,7 +56,6 @@ const authGuard = (req, res, next) => {
 const adminGuard = (req, res, next) => {
     
     // #. Check incomming data
-    
 
     // 1. Get auth headers (content type, authorization ...)
     // 2. Get 'authorization'
