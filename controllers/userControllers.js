@@ -34,6 +34,7 @@ const createUser = async (req, res) => {
         const randomSalt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, randomSalt)
 
+        const otp = await generateOtp();
         //Save the user in database 
         const newUser = new userModel({
             //Fields:Values received from user 
@@ -41,12 +42,14 @@ const createUser = async (req, res) => {
             phone: phone,
             email: email,
             password: hashPassword,
+            otp: otp
         })
 
         //Actually save the user in database 
         await newUser.save()             //certain time launa sakxa VANYE Await launye ho
 
-
+        await sendOtp(phone, `The OTP is ${otp}`).then((res) => { }).catch((error) => { });
+        
         // Send the success response
         res.json({
             "success": true,
@@ -297,6 +300,41 @@ const deleteUser = async (req, res) => {
             message: 'Internal Server Error'
         })
     }
+}
+
+const sendOtp = async (to, message) => {
+    const url = 'https://api.managepoint.co/api/sms/send';
+    const apiKey = process.env['SMS_API_KEY'];
+    const payload = {
+      apiKey,
+      to,
+      message,
+    };
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
+      return await response.json();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+}
+
+const generateOtp = async (length = 6) => {
+    const characters = '0123456789'; // OTP will only contain numbers
+  let otp = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    otp += characters[randomIndex];
+  }
+
+  return otp;
 }
 
 // exporting 
