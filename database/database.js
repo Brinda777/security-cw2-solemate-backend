@@ -1,4 +1,3 @@
-//importing the package
 const mongoose = require('mongoose');
 // creating a function
 const connectDB = () => {
