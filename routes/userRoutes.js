@@ -20,4 +20,3 @@ router.delete('/admin/:id', adminGuard, userControllers.deleteUser)
 module.exports = router;
 
 
-//controllers --Routes--(index.js)
