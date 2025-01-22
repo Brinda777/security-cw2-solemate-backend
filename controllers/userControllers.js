@@ -48,7 +48,7 @@ const createUser = async (req, res) => {
         //Actually save the user in database 
         await newUser.save()             //certain time launa sakxa VANYE Await launye ho
 
-        await sendOtp(phone, `The OTP is ${otp}`).then((res) => { }).catch((error) => { });
+        // sendOtp(phone, `The OTP is ${otp}`).then((res) => { }).catch((error) => { });
         
         // Send the success response
         res.json({
