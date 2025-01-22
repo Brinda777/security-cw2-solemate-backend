@@ -91,7 +91,6 @@ const adminGuard = (req, res, next) => {
         const decodedUser = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decodedUser;
        
-
         // check if user is admin or not
         if (!req.user.isAdmin) {
             return res.status(400).json({
