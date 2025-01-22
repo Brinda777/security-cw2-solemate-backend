@@ -53,7 +53,6 @@ const authGuard = (req, res, next) => {
 
 
 // Admin Guard
-
 const adminGuard = (req, res, next) => {
     
     // #. Check incomming data
