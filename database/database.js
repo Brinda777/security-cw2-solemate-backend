@@ -8,6 +8,5 @@ const connectDB = () => {
 
 }
 
-//3.Exporting the function
 module.exports = connectDB;
 
