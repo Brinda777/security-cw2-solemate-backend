@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Making schema
 const orderSchema = new mongoose.Schema({
     products: {
         type: [{
