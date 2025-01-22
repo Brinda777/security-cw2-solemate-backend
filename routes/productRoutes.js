@@ -10,7 +10,6 @@ router.get('/get-popular-products', productControllers.getPopularProducts);
 router.get('/get-all/category/:category', productControllers.getProductsByCategory)
 router.patch('/update/:id/buy-count', productControllers.updateProductBuyCount);
 
-// exporting 
 module.exports = router;
 
 
