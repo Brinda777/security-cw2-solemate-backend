@@ -11,7 +11,6 @@ router.get('/admin/get-all', adminGuard, orderControllers.getAllOrders)
 router.patch('/update/:id/:status', adminGuard, orderControllers.updateOrder)
 router.get('/getby/:status',authGuard,orderControllers.get_all_order_by_status)
 
-// exporting 
 module.exports = router;
 
 
