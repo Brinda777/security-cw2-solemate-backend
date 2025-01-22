@@ -17,7 +17,6 @@ router.get('/admin/get-all', adminGuard, userControllers.getUsers)
 
 router.delete('/admin/:id', adminGuard, userControllers.deleteUser)
 
-// exporting 
 module.exports = router;
 
 
