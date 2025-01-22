@@ -7,7 +7,6 @@ router.delete('/remove',authGuard, cartControllers.removeItemsFromCart)
 router.delete('/remove/:id', authGuard, cartControllers.removeItemFromCart) // The cart ID should be passed here, no the product ID
 router.get('/get-all', authGuard, cartControllers.getCartItems)
 
-// exporting 
 module.exports = router;
 
 
