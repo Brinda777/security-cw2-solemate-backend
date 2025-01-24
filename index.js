@@ -5,9 +5,13 @@ const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const  morgan= require('morgan');
 const { default: rateLimit } = require('express-rate-limit');
+const { default: helmet } = require('helmet');
 
 //2. creating an express app
 const app = express();
+
+// XSS Prevention
+// app.use(helmet());
  
 // josn config
 app.use(express.json())
@@ -59,7 +63,7 @@ app.use('/api/cart', require('./routes/cartRoutes'))
 app.use('/api/order', require('./routes/orderRoutes'))
 
 //4. starting the server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server-app is running on port ${PORT}`)
 })
 
