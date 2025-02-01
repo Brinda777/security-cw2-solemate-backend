@@ -6,6 +6,7 @@ const fileUpload = require('express-fileupload')
 const  morgan= require('morgan');
 const { default: rateLimit } = require('express-rate-limit');
 const { default: helmet } = require('helmet');
+const session = require('express-session');
 
 //2. creating an express app
 const app = express();
@@ -51,6 +52,27 @@ dotenv.config()
 
 //connecting to the databades
 connectDB();
+
+// Initialize session
+app.use(session({
+  secret: process.env['SESSION_SECRET'],
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1 * 60 * 1000, // 15 minutes
+    httpOnly: true,
+    secure: true,
+  }
+}));
+
+// Middleware to reset session expiry on activity
+app.use((req, res, next) => {
+  if (req.session) {
+    req.session._garbage = Date.now();
+    req.session.touch();
+  }
+  next();
+});
 
 //3. deffining the port
 const PORT = process.env.PORT;
