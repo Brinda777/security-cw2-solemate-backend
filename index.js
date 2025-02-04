@@ -7,6 +7,8 @@ const  morgan= require('morgan');
 const { default: rateLimit } = require('express-rate-limit');
 const { default: helmet } = require('helmet');
 const session = require('express-session');
+const path = require('path')
+const fs = require('fs')
 
 //2. creating an express app
 const app = express();
@@ -23,19 +25,36 @@ app.use(fileUpload())
 // Make a public folder access to outside
 app.use(express.static('./public'))
 
-app.use(morgan("dev"))
+// app.use(morgan("dev"))
+
+// Ensure the audit directory exists
+const auditLogDir = path.join(__dirname, 'audit');
+if (!fs.existsSync(auditLogDir)) {
+  fs.mkdirSync(auditLogDir);
+}
+
+// Create a write stream for logs
+const logStream = fs.createWriteStream(path.join(auditLogDir, 'access.log'), { flags: 'a' });
+
+// Custom format with timestamp
+morgan.token('timestamp', () => new Date().toISOString());
+
+const logFormat = '[:timestamp] :method :url :status :response-time ms';
+
+// Use Morgan with custom format
+app.use(morgan(logFormat, { stream: logStream }));
 
 
 // Rate limit
-const limiter = rateLimit({
-	windowMs: 8 * 60 * 1000, // 1 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-})
+// const limiter = rateLimit({
+// 	windowMs: 20 * 60 * 1000, // 20 minutes
+// 	limit: 100, // Limit each IP to 100 requests per `window`
+// 	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+// 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+// })
 
 
-app.use(limiter)
+// app.use(limiter)
 
 //cors config
 const corsOptions = {
@@ -59,7 +78,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1 * 60 * 1000, // 15 minutes
+    maxAge: 20 * 60 * 1000,
     httpOnly: true,
     secure: true,
   }

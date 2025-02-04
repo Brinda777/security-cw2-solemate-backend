@@ -104,10 +104,17 @@ const loginUser = async (req, res) => {
         //3.1 secret decryption key(.env)
         const token = jwt.sign(
             { id: user._id, isAdmin: user.isAdmin },
-            "SECRET"
+            process.env['JWT_SECRET']
         )
+
+        res.cookie(user.id, user.id, {
+            // httpOnly: true,
+            // secure: true,
+            // sameSite: 'strict'
+        });
+
         ///4. send the token, userdata,message to the user 
-        res.json({
+        return res.json({
             "success": true,
             "message": "Login Successful",
             "token": token,
